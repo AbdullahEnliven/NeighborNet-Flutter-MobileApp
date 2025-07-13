@@ -1,0 +1,15 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.khurram.birdslovers",
+            "sha256_cert_fingerprints": [
+                "01:8B:FD:20:72:EA:E2:38:D6:A6:04:65:5C:D9:C5:6C:C9:74:DD:D5:FD:FA:DA:70:90:2C:DD:87:F8:BE:07:BF",
+                "2F:E8:1C:8C:C7:0A:A7:93:E1:E3:57:9F:4F:BF:1C:B8:28:0A:70:04:FD:10:AF:B8:A0:51:53:11:8C:8A:46:B6"
+            ]
+        }
+    }
+]
