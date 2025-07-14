@@ -15,7 +15,7 @@ class AskForHelpForm extends StatelessWidget {
         FormFieldData(label: 'Title', isRequired: true, isMultiline: true),
         FormFieldData(label: 'Details', isMultiline: true),
        // FormFieldData(label: 'Location'),
-        FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
+       // FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
         FormFieldData(
           label: 'Upload Image (optional)',
           isRequired: false,
@@ -40,7 +40,7 @@ class GiveawayItemForm extends StatelessWidget {
         FormFieldData(label: 'Description', isMultiline: true),
         FormFieldData(label: 'Condition', hint: 'New, Used, etc.'),
         //(label: 'Location'),
-        FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
+       // FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
         FormFieldData(label: 'Item Image', isRequired: true, isImage: true),
       ],
     );
@@ -105,7 +105,7 @@ class NeedVolunteersForm extends StatelessWidget {
           inputType: TextInputType.datetime,
         ),
        // FormFieldData(label: 'Location'),
-        FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
+        //FormFieldData(label: 'Contact Number', inputType: TextInputType.phone),
         FormFieldData(label: 'Item Image', isRequired: false, isImage: true),
       ],
     );

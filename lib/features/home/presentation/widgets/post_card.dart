@@ -130,15 +130,17 @@ class _PostCardState extends State<PostCard> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Author name with ellipsis if too long
-          widget.userpost?SizedBox.shrink()  :  Flexible(
-                child: Text(
-                  author,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: Colors.grey,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
+              widget.userpost
+                  ? SizedBox.shrink()
+                  : Flexible(
+                      child: Text(
+                        author,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
               // Remove SizedBox(width: 8) here to eliminate space
 
               // Share IconButton with zero padding and constraints
@@ -420,7 +422,7 @@ class _PostCardState extends State<PostCard> {
       final postId = post['postId'];
       final publishedAt = formatPostTimestamp(post['timestamp']);
       final String postDetails =
-          '📢 *$postType* on NeighborNet\n\n👤 *Posted by*: $author\n📍 *Location*: $location\n📝 *Details*: ${_getShareableDetails(postType, textFields)}\n📅 *Published At*: $publishedAt\n\nView more details:\nhttps://neighbornet-xyz.web.app/post/$postId';
+          '📢 *$postType* on NeighborNet\n\n👤 *Posted by*: $author\n📍 *Location*: $location\n📝 *Details*: ${_getShareableDetails(postType, textFields)}\n📅 *Published At*: $publishedAt\n\nView more details:\nhttps://neighbournet-bd503.web.app/';
 
       final firstImageUrl = imageUrls.values.firstWhere(
         (e) => e != null,

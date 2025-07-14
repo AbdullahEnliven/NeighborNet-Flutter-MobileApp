@@ -259,12 +259,39 @@ class _PostFormPageState extends State<PostFormPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              _currentStep = 2;
-                            });
+                          final missingImages = widget.fields.where(
+                            (field) =>
+                                field.isImage &&
+                                field.isRequired &&
+                                (_images[field.label] == null),
+                          );
+
+                          final isFormValid =
+                              _formKey.currentState?.validate() ?? false;
+
+                          if (!isFormValid) return;
+
+                          if (missingImages.isNotEmpty) {
+                            final missingLabels = missingImages
+                                .map((e) => e.label)
+                                .join(', ');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please upload required image(s): $missingLabels',
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return; // Prevent moving to next step
                           }
+
+                          // ✅ Everything is valid
+                          setState(() {
+                            _currentStep = 2;
+                          });
                         },
+
                         child: const Text('Next'),
                       ),
                     ),

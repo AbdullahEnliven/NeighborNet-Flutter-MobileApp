@@ -10,7 +10,7 @@ class AppRouter {
     initialLocation: '/',
     routes: [
       GoRoute(path: '/',builder: (context,state)=> SplashScreen()),
-      GoRoute(path: '/userprofile', builder: (context, state) => ProfileScreen()),
+     // GoRoute(path: '/userprofile', builder: (context, state) => ProfileScreen()),
       GoRoute(path: '/auth', builder: (context, state) => PhoneAuthScreen()),
       GoRoute(
         path: '/home',

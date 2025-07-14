@@ -11,6 +11,7 @@ import 'package:neighbornet/features/auth/cubits/phone_auth_cubit.dart';
 import 'package:neighbornet/features/chat/presentation/cubit/chat_list_cubit.dart';
 import 'package:neighbornet/features/post/data/datasources/post_remote_datasource.dart';
 import 'package:neighbornet/features/pushnotification/push_notification.dart';
+import 'package:neighbornet/features/user_profile/widgets/profile_form.dart';
 import 'features/post/data/repositories/post_repository_impl.dart';
 import 'features/post/domain/usecases/submit_post.dart';
 import 'features/post/presentation/cubit/post_form_cubit.dart';
@@ -31,31 +32,31 @@ void main() async {
     });
   }
   runApp(
-    MultiBlocProvider(
+   MultiRepositoryProvider(
       providers: [
-        BlocProvider(create: (_) => PhoneAuthCubit()),
-        BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => UserCubit(userRepo)),
-        RepositoryProvider(
+        RepositoryProvider<PostRepositoryImpl>(
           create: (_) => PostRepositoryImpl(
             FirebaseFirestore.instance,
             FirebaseStorage.instance,
             PostRemoteDataSourceImpl(),
           ),
         ),
-        RepositoryProvider(
+        RepositoryProvider<SubmitPostUseCase>(
           create: (context) =>
               SubmitPostUseCase(context.read<PostRepositoryImpl>()),
-        ),
-        BlocProvider(
-          create: (_) => ChatListCubit(
-            firestore: FirebaseFirestore.instance,
-            auth: FirebaseAuth.instance,
-          ),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(create: (_) => PhoneAuthCubit()),
+          BlocProvider(create: (_) => ThemeCubit()),
+          BlocProvider(create: (_) => UserCubit(userRepo)), // ✅ Only once
+          BlocProvider(
+            create: (_) => ChatListCubit(
+              firestore: FirebaseFirestore.instance,
+              auth: FirebaseAuth.instance,
+            ),
+          ),
           BlocProvider(
             create: (context) =>
                 PostFormCubit(context.read<SubmitPostUseCase>()),

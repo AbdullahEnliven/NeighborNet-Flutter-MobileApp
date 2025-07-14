@@ -19,22 +19,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final _bioController = TextEditingController();
   File? _image;
   String? _imageUrl;
-
-  @override
-  void initState() {
-    super.initState();
-    final userCubit = context.read<UserCubit>();
-    final state = userCubit.state;
-
-    // Prefill data if available
-    if (state is UserLoaded) {
-      final user = state.user;
-      _nameController.text = user.name ?? '';
-      _addressController.text = user.address ?? '';
-      _bioController.text = user.bio ?? '';
-      _imageUrl = user.photoUrl;
-    }
-  }
+  bool _isDataPrefilled = false;
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -45,25 +30,35 @@ class _ProfileFormState extends State<ProfileForm> {
   void _onSave() {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Full name is required.")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Full name is required.")));
       return;
     }
 
     context.read<UserCubit>().saveProfile(
-          name,
-          _image,
-          _addressController.text.trim(),
-          _bioController.text.trim(),
-        );
+      name,
+      _image,
+      _addressController.text.trim(),
+      _bioController.text.trim(),
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('fetch');
+      Future.delayed(Duration(seconds: 5), () {
+      context.read<UserCubit>().loadUser();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
-
+ 
     return BlocListener<UserCubit, UserState>(
       listener: (context, state) {
         if (state is SavedCompleted) {
@@ -77,6 +72,16 @@ class _ProfileFormState extends State<ProfileForm> {
       child: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           final isLoading = state is UserLoading;
+
+          // Prefill user data once when UserLoaded state is emitted
+          if (state is UserLoaded && !_isDataPrefilled) {
+            final user = state.user;
+            _nameController.text = user.name ?? '';
+            _addressController.text = user.address ?? '';
+            _bioController.text = user.bio ?? '';
+            _imageUrl = user.photoUrl;
+            _isDataPrefilled = true;
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 90),
@@ -92,11 +97,10 @@ class _ProfileFormState extends State<ProfileForm> {
                         backgroundColor: isDark
                             ? Colors.grey[800]
                             : Colors.grey[200],
-                        backgroundImage:
-                            _image != null && _image!.path.isNotEmpty
+                        backgroundImage: _image != null
                             ? FileImage(_image!)
                             : (_imageUrl != null && _imageUrl!.isNotEmpty
-                                  ? NetworkImage(_imageUrl!)
+                                  ? NetworkImage(_imageUrl!) as ImageProvider
                                   : null),
                         child:
                             (_image == null &&

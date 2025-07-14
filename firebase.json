@@ -1,1 +1,29 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"neighbournet-bd503","appId":"1:914918601431:android:bb4f475b35253cc5123692","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"neighbournet-bd503","configurations":{"android":"1:914918601431:android:bb4f475b35253cc5123692"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "neighbournet-bd503",
+          "appId": "1:914918601431:android:bb4f475b35253cc5123692",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "neighbournet-bd503",
+          "configurations": {
+            "android": "1:914918601431:android:bb4f475b35253cc5123692"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

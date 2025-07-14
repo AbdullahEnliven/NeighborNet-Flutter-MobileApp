@@ -86,6 +86,7 @@ class UserProfileRepository {
 
   Future<UserProfile> fetchUserProfile() async {
     final uid = _auth.currentUser!.uid;
+    print("Fetching user profile for UID: $uid");
     final doc = await _firestore.collection('users').doc(uid).get();
     if (!doc.exists) throw Exception("User profile not found");
     return UserProfile.fromMap(doc.data()!);
