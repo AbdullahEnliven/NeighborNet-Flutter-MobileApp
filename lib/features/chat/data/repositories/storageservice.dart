@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:path/path.dart' as p;
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as http;
 
 class StorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  StorageService() {}
+  StorageService();
 
   Future<String?> uploadProfileImage({
     required File file,
@@ -13,7 +14,7 @@ class StorageService {
   }) async {
     try {
       Reference ref =
-          _storage.ref('users/pimg').child("$uid${p.extension(file.path)}");
+          _storage.ref('users/pimg').child("$uid${http.extension(file.path)}");
       UploadTask uploadTask = ref.putFile(file);
       TaskSnapshot taskSnapshot = await uploadTask;
 
@@ -24,21 +25,21 @@ class StorageService {
         return null;
       }
     } catch (e) {
-      print("Error uploading image: $e");
       return null;
     }
   }
 
   Future<String?> uploadimg(
+      // ignore: non_constant_identifier_names
       {required File file, required String Chatid}) async {
-    Reference _fileref = _storage
+    Reference fileref = _storage
         .ref('chats/$Chatid')
-        .child("${DateTime.now().toIso8601String()}${p.extension(file.path)}");
-    UploadTask _upload = _fileref.putFile(file);
-    TaskSnapshot taskSnapshot = await _upload;
+        .child("${DateTime.now().toIso8601String()}${http.extension(file.path)}");
+    UploadTask upload = fileref.putFile(file);
+    TaskSnapshot taskSnapshot = await upload;
 
     if (taskSnapshot.state == TaskState.success) {
-      String downloadURL = await _fileref.getDownloadURL();
+      String downloadURL = await fileref.getDownloadURL();
       return downloadURL;
     } else {
       return null;

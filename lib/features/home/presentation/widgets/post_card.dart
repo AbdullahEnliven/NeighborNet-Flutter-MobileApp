@@ -1,12 +1,14 @@
 // post_card_body.dart
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neighbornet/features/chat/data/repositories/firebasefirestore.dart';
 import 'package:neighbornet/features/chat/presentation/messaging_page.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -59,7 +61,7 @@ class _PostCardState extends State<PostCard> {
             const SizedBox(height: 8),
             _buildLocation(theme, location),
             const SizedBox(height: 12),
-            if (title != null) _buildTitle(theme, title),
+            _buildTitle(theme, title),
             if (subtitle != null)
               Text(subtitle, style: theme.textTheme.bodyMedium),
             if (imageUrl != null) _buildImage(imageUrl),
@@ -198,7 +200,6 @@ class _PostCardState extends State<PostCard> {
                                 content: Text('Post deleted successfully'),
                               ),
                             );
-                            // TODO: Refresh or update UI after delete
                           }
                         } catch (e) {
                           if (mounted) {
@@ -256,22 +257,53 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Widget _buildImage(String imageUrl) {
-    return Column(
-      children: [
-        const SizedBox(height: 12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            imageUrl,
-            width: double.infinity,
-            height: 180,
-            fit: BoxFit.cover,
-          ),
+Widget _buildImage(String imageUrl) {
+  return Column(
+    children: [
+      const SizedBox(height: 12),
+      ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.network(
+          imageUrl,
+          width: double.infinity,
+          height: 180,
+          fit: BoxFit.cover,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+
+            return Shimmer.fromColors(
+              baseColor: isDark ? Colors.grey.shade800 : Colors.grey.shade300,
+              highlightColor: isDark ? Colors.grey.shade700 : Colors.grey.shade100,
+              child: Container(
+                width: double.infinity,
+                height: 180,
+                color: isDark ? Colors.grey.shade900 : Colors.white,
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+
+            return Container(
+              width: double.infinity,
+              height: 180,
+              color: isDark ? Colors.grey.shade800 : Colors.grey[300],
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.broken_image,
+                size: 40,
+                color: isDark ? Colors.grey.shade500 : Colors.grey,
+              ),
+            );
+          },
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 
   Widget _buildFooter(
     BuildContext context,
@@ -290,7 +322,7 @@ class _PostCardState extends State<PostCard> {
               'Call',
               'phone-call',
               Theme.of(context).colorScheme.onSecondary,
-              () => _makePhoneCall(phonenumber ?? ''),
+              () => _makePhoneCall(phonenumber),
             ),
             _buildActionButton(
               context,
@@ -298,7 +330,7 @@ class _PostCardState extends State<PostCard> {
               'whatsapp',
               Theme.of(context).colorScheme.onSecondary,
               () => _sendWhatsAppMessage(
-                phonenumber ?? '',
+                phonenumber,
                 'Hello, I found your post on NeighborNet and would like to discuss it further.',
               ),
             ),
@@ -369,22 +401,9 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Future<void> _sendSms(String phoneNumber, String message) async {
-    final Uri smsLaunchUri = Uri(
-      scheme: 'sms',
-      path: phoneNumber,
-      queryParameters: <String, String>{'body': Uri.encodeComponent(message)},
-    );
-    await launchUrl(smsLaunchUri);
-  }
-
   Future<void> _sendWhatsAppMessage(String phoneNumber, String message) async {
-    // Remove all symbols and spaces from phone number
     String cleanedNumber = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
-
-    // Ensure it's in international format (e.g., 923001234567 for Pakistan)
     if (!cleanedNumber.startsWith('92')) {
-      // Add logic if needed to convert to international format
       cleanedNumber = '92$cleanedNumber';
     }
 
@@ -419,7 +438,6 @@ class _PostCardState extends State<PostCard> {
           ? 'Anonymous'
           : post['authorName'];
       final location = post['address'] ?? 'Unknown';
-      final postId = post['postId'];
       final publishedAt = formatPostTimestamp(post['timestamp']);
       final String postDetails =
           '📢 *$postType* on NeighborNet\n\n👤 *Posted by*: $author\n📍 *Location*: $location\n📝 *Details*: ${_getShareableDetails(postType, textFields)}\n📅 *Published At*: $publishedAt\n\nView more details:\nhttps://neighbournet-bd503.web.app/';

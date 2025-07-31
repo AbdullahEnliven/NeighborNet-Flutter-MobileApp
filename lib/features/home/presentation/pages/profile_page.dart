@@ -67,11 +67,14 @@ class ProfileTabPage extends StatelessWidget {
         await FirebaseAuth.instance.signOut();
 
         ScaffoldMessenger.of(
+          // ignore: use_build_context_synchronously
           context,
         ).showSnackBar(const SnackBar(content: Text("Logged Out")));
 
+        // ignore: use_build_context_synchronously
         context.go('/auth'); // Adjust this to match your GoRouter route
       } catch (e) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Logout failed: ${e.toString()}")),
         );
@@ -101,7 +104,6 @@ class ProfileTabPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 80),
               child: Column(
                 children: [
-                  // Profile Picture
                   Center(
                     child: Stack(
                       children: [
@@ -109,7 +111,7 @@ class ProfileTabPage extends StatelessWidget {
                           radius: 55,
                           backgroundColor: theme.cardColor,
                           child:
-                              user.photoUrl != null && user.photoUrl.isNotEmpty
+                              user.photoUrl.isNotEmpty
                               ? ClipOval(
                                   child: CachedNetworkImage(
                                     imageUrl: user.photoUrl,
@@ -130,6 +132,7 @@ class ProfileTabPage extends StatelessWidget {
                               : Icon(
                                   Icons.person,
                                   size: 50,
+                                  // ignore: deprecated_member_use
                                   color: colorScheme.onSurface.withOpacity(0.7),
                                 ),
                         ),
@@ -170,6 +173,7 @@ class ProfileTabPage extends StatelessWidget {
                   Text(
                     _extractMainAddress(user.address),
                     style: textTheme.bodySmall?.copyWith(
+                      // ignore: deprecated_member_use
                       color: colorScheme.onSurface.withOpacity(0.6),
                     ),
                   ),
@@ -184,6 +188,7 @@ class ProfileTabPage extends StatelessWidget {
                     ),
                   ),
 
+                  // ignore: deprecated_member_use
                   Divider(color: colorScheme.surfaceVariant),
 
                   _buildOption(
@@ -217,6 +222,7 @@ class ProfileTabPage extends StatelessWidget {
                   Text(
                     "App version 1.0.0",
                     style: textTheme.bodySmall?.copyWith(
+                      // ignore: deprecated_member_use
                       color: colorScheme.onSurface.withOpacity(0.5),
                       fontSize: 13,
                     ),

@@ -17,9 +17,9 @@ class CustomBottomNavBar extends StatelessWidget {
 
         return ConvexAppBar(
           style: TabStyle.fixedCircle,
-          backgroundColor: colorScheme.surface, // light: white / dark: #1E1E1E
-          color: isDark ? Colors.grey[500] : Colors.grey[700], // inactive icons
-          activeColor: colorScheme.primary, // main accent color (customized per theme)
+          backgroundColor: colorScheme.surface,
+          color: isDark ? Colors.grey[500] : Colors.grey[700],
+          activeColor: colorScheme.primary,
           items: const [
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.message, title: 'Chats'),

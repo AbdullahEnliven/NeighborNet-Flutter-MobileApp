@@ -100,7 +100,7 @@ class _PostFormPageState extends State<PostFormPage> {
         content: content,
         profileurl: user.photoUrl,
         postId: postId,
-        phoneNumber: user.phoneNumber ?? '',
+        phoneNumber: user.phoneNumber,
       );
     }
   }

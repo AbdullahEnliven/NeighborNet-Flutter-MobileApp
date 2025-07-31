@@ -46,14 +46,19 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-    print('fetch');
-      Future.delayed(Duration(seconds: 5), () {
+    super.initState();  
       context.read<UserCubit>().loadUser();
-    });
+  
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    _image==null;
+    _nameController.dispose();
+    _addressController.dispose();
+    _addressController.dispose();
+    _bioController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -76,9 +81,9 @@ class _ProfileFormState extends State<ProfileForm> {
           // Prefill user data once when UserLoaded state is emitted
           if (state is UserLoaded && !_isDataPrefilled) {
             final user = state.user;
-            _nameController.text = user.name ?? '';
-            _addressController.text = user.address ?? '';
-            _bioController.text = user.bio ?? '';
+            _nameController.text = user.name;
+            _addressController.text = user.address;
+            _bioController.text = user.bio;
             _imageUrl = user.photoUrl;
             _isDataPrefilled = true;
           }

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neighbornet/features/home/presentation/widgets/post_card.dart';
-//import 'package:neighbornet/features/posts/widgets/post_card.dart'; // Adjust this import path
 
 class MyPostsPage extends StatelessWidget {
   const MyPostsPage({super.key});

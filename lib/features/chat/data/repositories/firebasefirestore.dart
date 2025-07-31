@@ -59,9 +59,11 @@ class database {
     return result.exists;
   }
 
+  // ignore: non_constant_identifier_names
   String Generatedchatid({required String uid1, required String uid2}) {
     List uids = [uid1, uid2];
     uids.sort();
+    // ignore: non_constant_identifier_names
     String Chatid = uids.fold('', (id, uid) => "$id$uid");
     return Chatid;
   }
@@ -261,7 +263,7 @@ class database {
         messageIds = querySnapshot.docs.map((doc) => doc.id).toList();
       }
     } catch (e) {
-      print('Error fetching message IDs: $e');
+      null;
     }
 
     return messageIds;

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:go_router/go_router.dart';
 import 'phone_auth_state.dart';
 
 class PhoneAuthCubit extends Cubit<PhoneAuthState> {
@@ -42,15 +44,31 @@ class PhoneAuthCubit extends Cubit<PhoneAuthState> {
       );
 
       await _auth.signInWithCredential(credential);
-      emit(PhoneAuthVerified());
+
+      final uid = _auth.currentUser?.uid;
+      if (uid != null) {
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get();
+
+        if (context.mounted) {
+          if (doc.exists) {
+            context.go('/');
+          } else {
+            context.go('/profileform');
+          }
+        }
+        emit(PhoneAuthVerified());
+      }
     } catch (e) {
       emit(PhoneAuthOtpSent());
-      otp='';
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Invalid OTP or verification failed.")),
-      );
-      // emit(PhoneAuthOtpError("Invalid OTP or verification failed."));
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Invalid OTP or verification failed.")),
+        );
+      }
     }
   }
 

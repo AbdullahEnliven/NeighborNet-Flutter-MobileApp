@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:neighbornet/features/auth/cubits/phone_auth_cubit.dart';
 import 'package:neighbornet/features/auth/cubits/phone_auth_state.dart';
 import 'package:neighbornet/features/auth/widget/otp_fields.dart';
@@ -26,9 +25,10 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     return Scaffold(
       body: BlocConsumer<PhoneAuthCubit, PhoneAuthState>(
         listener: (context, state) {
-          if (state is PhoneAuthVerified) {
-            context.go('/userprofile');
-          } else if (state is PhoneAuthPhoneError ||
+          // if (state is PhoneAuthVerified) {
+          //   //context.go('/profileform');
+          // } 
+          if (state is PhoneAuthPhoneError ||
               state is PhoneAuthOtpError) {
             ScaffoldMessenger.of(
               context,
@@ -144,6 +144,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                       backgroundColor: isLoading
+                          // ignore: deprecated_member_use
                           ? Theme.of(context).primaryColor.withOpacity(0.7)
                           : Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,

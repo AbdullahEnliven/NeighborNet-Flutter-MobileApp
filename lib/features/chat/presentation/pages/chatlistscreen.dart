@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neighbornet/features/chat/data/repositories/firebasefirestore.dart';
 import 'package:neighbornet/features/chat/presentation/messaging_page.dart';
+import 'package:neighbornet/features/chat/presentation/widgets/chatlistshimmer.dart';
+import 'package:shimmer/shimmer.dart';
 import '../cubit/chat_list_cubit.dart';
 import '../cubit/chat_list_state.dart';
 
@@ -30,7 +33,9 @@ class _ChatListScreenState extends State<ChatListScreen> {
       body: BlocBuilder<ChatListCubit, ChatListState>(
         builder: (context, state) {
           if (state is ChatListLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ChatListShimmer();
+
+            //  const Center(child: CircularProgressIndicator());
           } else if (state is ChatListLoaded) {
             if (state.chatList.isEmpty) {
               return const Center(child: Text("No chats yet"));
@@ -41,13 +46,28 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 final chat = state.chatList[index];
 
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: chat.otherUserImage != null
-                        ? NetworkImage(chat.otherUserImage!)
-                        : null,
-                    child: chat.otherUserImage == null
-                        ? const Icon(Icons.person)
-                        : null,
+                  leading: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: chat.otherUserImage ?? '',
+                      width: 48,
+                      height: 48,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          color: Colors.white,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        width: 48,
+                        height: 48,
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.person, color: Colors.grey),
+                      ),
+                    ),
                   ),
                   title: Text(chat.otherUserName),
                   subtitle: Text(chat.lastMessage ?? ''),
@@ -61,14 +81,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          // Text(
-                          //   chat.lastMessageTime == null
-                          //       ? ''
-                          //       : DateFormat.jm().format(
-                          //           chat.lastMessageTime!.toDate(),
-                          //         ),
-                          //   style: const TextStyle(fontSize: 12),
-                          // ),
                           if (unreadCount > 0)
                             CircleAvatar(
                               radius: 10,
@@ -96,7 +108,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                         ),
                       ),
                     );
-                  
                   },
                 );
               },

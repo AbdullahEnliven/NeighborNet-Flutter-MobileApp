@@ -20,21 +20,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _handleStartup();
+
     pushnotification.requestpermissions();
     storeFCMToken();
+    _handleStartup();
   }
 
   Future<void> storeFCMToken() async {
-    // Get the current user
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       return;
     }
 
-    // Get FCM token
     final fcmToken = await FirebaseMessaging.instance.getToken();
-    print('fcmToken: $fcmToken');
     if (fcmToken != null) {
       final userDoc = FirebaseFirestore.instance
           .collection('users')
@@ -45,9 +43,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _handleStartup() async {
     final user = FirebaseAuth.instance.currentUser;
-
+    await Future.delayed(const Duration(seconds: 2));
     if (user != null) {
-      // ✅ Fetch user data from Firestore using UID
       context.read<UserCubit>().loadUser();
     } else {
       await Future.delayed(const Duration(seconds: 2));

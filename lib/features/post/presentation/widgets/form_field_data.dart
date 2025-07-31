@@ -119,7 +119,7 @@ class _PostFormPageState extends State<PostFormPage> {
       content: content,
       profileurl: _sendAnonymously ? '' : (_allowContact ? user.photoUrl : ''),
       postId: postId,
-      phoneNumber: _sendAnonymously ? '' : user.phoneNumber ?? '',
+      phoneNumber: _sendAnonymously ? '' : user.phoneNumber,
     );
   }
 

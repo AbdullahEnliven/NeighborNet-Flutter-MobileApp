@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text("Logged Out")));
-        context.go('/auth'); // Adjust according to your app's router
+        context.go('/auth'); 
       }
     }
   }
@@ -88,10 +90,10 @@ class _SettingsPageState extends State<SettingsPage> {
               });
             },
             secondary: Icon(Icons.notifications, color: theme.iconTheme.color),
-            activeColor: theme.colorScheme.primary, // <- Fix for white thumb
+            activeColor: theme.colorScheme.primary,
             activeTrackColor: theme.colorScheme.primary.withOpacity(
               0.4,
-            ), // Track color
+            ), 
           ),
           BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {

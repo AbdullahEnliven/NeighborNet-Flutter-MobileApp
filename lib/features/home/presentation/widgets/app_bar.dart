@@ -11,10 +11,8 @@ class UserInfoBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 40,
-      left: 20,
-      right: 20,
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, left: 20, right: 20),
       child: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           final bool isUserLoaded = state is UserLoaded;
@@ -44,9 +42,7 @@ class UserInfoBar extends StatelessWidget {
                                 placeholder: (_, __) => const SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
+                                  child: CircularProgressIndicator(strokeWidth: 2),
                                 ),
                                 errorWidget: (_, __, ___) =>
                                     const Icon(Icons.error, size: 20),
@@ -54,7 +50,6 @@ class UserInfoBar extends StatelessWidget {
                             )
                           : const Icon(Icons.person, size: 20),
                     ),
-
                     const SizedBox(width: 10),
                     if (isUserLoaded)
                       Text(
@@ -67,26 +62,22 @@ class UserInfoBar extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  PopupMenuButton<String>(
-                    icon: Icon(Icons.more_vert),
-                    onSelected: (value) {
-                      if (value == 'settings') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SettingsPage(),
-                          ), // Replace with your settings screen
-                        );
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'settings',
-                        child: Text('Settings'),
+              PopupMenuButton<String>(
+                icon: Icon(Icons.more_vert),
+                onSelected: (value) {
+                  if (value == 'settings') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
                       ),
-                    ],
+                    );
+                  }
+                },
+                itemBuilder: (context) => const [
+                  PopupMenuItem(
+                    value: 'settings',
+                    child: Text('Settings'),
                   ),
                 ],
               ),

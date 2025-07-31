@@ -56,7 +56,7 @@ class PostRepositoryImpl implements PostRepository {
       content: content,
       fcmToken: fcmToken,
       postId: post.postId,
-      phoneNumber: post.phoneNumber ?? '',
+      phoneNumber: post.phoneNumber,
     );
 
     await firestore.collection('posts').doc(postId).set(PostModel.toMap(finalPost));

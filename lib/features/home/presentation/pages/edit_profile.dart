@@ -62,13 +62,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
     try {
       final uid = _auth.currentUser!.uid;
       String? uploadedImageUrl = _profileImageUrl;
-
-      // Upload new image if picked
       if (_pickedImage != null) {
         uploadedImageUrl = await _storageService.uploadimg(
           file: _pickedImage!,
           Chatid:
-              'profile_pictures/$uid', // Use a separate folder or naming scheme
+              'profile_pictures/$uid'
         );
       }
 
@@ -76,8 +74,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'name': _nameController.text.trim(),
         'photoUrl': uploadedImageUrl,
       }, SetOptions(merge: true));
-
-      // Optionally update Firebase Auth displayName & photoURL
       await _auth.currentUser!.updateDisplayName(_nameController.text.trim());
       if (uploadedImageUrl != null) {
         await _auth.currentUser!.updatePhotoURL(uploadedImageUrl);

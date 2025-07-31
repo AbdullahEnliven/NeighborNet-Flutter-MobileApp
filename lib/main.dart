@@ -11,7 +11,6 @@ import 'package:neighbornet/features/auth/cubits/phone_auth_cubit.dart';
 import 'package:neighbornet/features/chat/presentation/cubit/chat_list_cubit.dart';
 import 'package:neighbornet/features/post/data/datasources/post_remote_datasource.dart';
 import 'package:neighbornet/features/pushnotification/push_notification.dart';
-import 'package:neighbornet/features/user_profile/widgets/profile_form.dart';
 import 'features/post/data/repositories/post_repository_impl.dart';
 import 'features/post/domain/usecases/submit_post.dart';
 import 'features/post/presentation/cubit/post_form_cubit.dart';
