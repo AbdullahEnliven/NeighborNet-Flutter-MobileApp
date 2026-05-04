@@ -31,7 +31,7 @@ void main() async {
     });
   }
   runApp(
-   MultiRepositoryProvider(
+    MultiRepositoryProvider(
       providers: [
         RepositoryProvider<PostRepositoryImpl>(
           create: (_) => PostRepositoryImpl(
